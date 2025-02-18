@@ -16,9 +16,7 @@
 
 
 
-  <!-- Listado de css con version dinamica segun modificacion de archivo -->
-  <!-- <link rel='stylesheet' href='https://www.fixdate.io/modelo-invitacion/105/css/slick-theme.css?v=1679945423' />  -->
-  
+  <!-- Listado de css con version dinamica segun modificacion de archivo -->  
   <link rel='stylesheet' href='/assets/css/addEvent.css' /> 
   <link rel='stylesheet' href='/assets/css/aos.css' /> 
   <link rel='stylesheet' href='/assets/css/bootstrap.css' />
@@ -41,43 +39,8 @@
 
 
   <!-- Favicons -->
-  <link rel="shortcut icon" href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon.ico">
-  <link rel="icon" sizes="16x16 32x32 64x64"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon.ico">
-  <link rel="icon" type="image/png" sizes="196x196"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-192.png">
-  <link rel="icon" type="image/png" sizes="160x160"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-160.png">
-  <link rel="icon" type="image/png" sizes="96x96"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-96.png">
-  <link rel="icon" type="image/png" sizes="64x64"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-64.png">
-  <link rel="icon" type="image/png" sizes="32x32"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-16.png">
-  <link rel="apple-touch-icon" href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-57.png">
-  <link rel="apple-touch-icon" sizes="114x114"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-114.png">
-  <link rel="apple-touch-icon" sizes="72x72"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-72.png">
-  <link rel="apple-touch-icon" sizes="144x144"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-144.png">
-  <link rel="apple-touch-icon" sizes="60x60"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-60.png">
-  <link rel="apple-touch-icon" sizes="120x120"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-120.png">
-  <link rel="apple-touch-icon" sizes="76x76"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-76.png">
-  <link rel="apple-touch-icon" sizes="152x152"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-152.png">
-  <link rel="apple-touch-icon" sizes="180x180"
-    href="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-180.png">
-  <meta name="msapplication-TileColor" content="#FFFFFF">
-  <meta name="msapplication-TileImage"
-    content="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/favicon-144.png">
-  <meta name="msapplication-config"
-    content="https://www.fixdate.io/modelo-invitacion/105/img/faviconit/browserconfig.xml">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico">
 </head>
 
 <body>
@@ -89,7 +52,7 @@
   <script>
     var _pathApp = "https://www.fixdate.io/";
 
-    var _pathProducto = "https://www.fixdate.io/modelo-invitacion/105/";
+    var _pathProducto = "";
 
     var tokenProducto = "";
 
@@ -155,7 +118,7 @@
 
 
   <!-- Lottie -->
-  <script src="https://www.fixdate.io/modelo-invitacion/105/js/lottie_svg.min.js"></script>
+  <script src="/assets/js/lottie_svg.min.js"></script>
 
 
   <!-- Animacion loader -->
@@ -543,7 +506,7 @@
 
       if (evento == 'Fiesta') {
         var titleModalAsistencia = lang_titleModalAsistenciaFiesta;
-        var rutaImgModalAsistencia = _pathProducto + 'img/img_circuloFiesta.svg';
+        var rutaImgModalAsistencia = '/assets/img/img_circuloCeremonia.svg' //'img/img_circuloFiesta.svg';
       }
 
       if (evento == 'Ceremonia') {
@@ -891,24 +854,24 @@
 
       // Aceptar webp?
       if (support_format_webp()) {
-        var imageInstagramParallax = 'img/instagram_mobile.webp';
+        var imageInstagramParallax = '/assets/img/instagram.webp';
       } else {
-        var imageInstagramParallax = 'img/instagram_mobile.jpg';
+        var imageInstagramParallax = '/assets/img/instagram.jpg';
       }
 
     } else {
 
       // Aceptar webp?
       if (support_format_webp()) {
-        var imageInstagramParallax = 'img/instagram.webp';
+        var imageInstagramParallax = '/assets/img/instagram.webp';
       } else {
-        var imageInstagramParallax = 'img/instagram.jpg';
+        var imageInstagramParallax = '/assets/img/instagram.jpg';
       }
 
     }
 
     $('.instagram').parallax({
-      imageSrc: _pathProducto + imageInstagramParallax
+      imageSrc: imageInstagramParallax
     });
   </script>
 
