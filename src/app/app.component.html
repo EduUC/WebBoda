@@ -49,7 +49,7 @@
 
         <a class="boton" id="play-music-modal" href="">Ingresar con música</a>
 
-        <a class="boton" data-dismiss="modal" aria-label="Close" id="" href="">Ingresar sin música</a>
+        <a class="boton" data-dismiss="modal" aria-label="Close" id="" href="" style="margin-left: 5px;">Ingresar sin música</a>
 
       </div>
 
@@ -124,7 +124,7 @@
               <p>
                 <img src="/assets/img/main/comilla-apertura.svg" alt=""> <br>
 
-                Todos somos mortales, <br> hasta el primer beso y la segunda copa de vino <br>
+                No sé a dónde vamos, <br> solo sé que quiero ir contigo <br>
 
                 <img src="/assets/img/main/comilla-cierre.svg" alt="">
               </p>
@@ -252,7 +252,7 @@
               <span class="nameBtn">Agendar</span>
 
               <span class="start">2025-10-10 13:00:00</span>
-              <span class="end">2025-10-11 01:00:00</span>
+              <span class="end">2025-10-10 14:30:00</span>
               <span class="timezone">Europe/Madrid</span>
               <span class="title">Boda de Eduardo y Lupe (Ceremonia)</span>
 
@@ -268,7 +268,7 @@
           <div class="info-box">
             <h6>Dirección</h6>
             <p>C/ Puig de Cebolla 4 - El Puig</p>
-            <a href="#" data-evento="Ceremonia" class="boton modal-como-llegar">¿Cómo llegar?</a>
+            <a href="#" data-evento="Ceremonia" class="boton modal-como-llegar">¿C&oacute;mo llegar?</a>
           </div>
 
         </div>
@@ -714,14 +714,15 @@
               </div>
 
               <div class="form-group">
-                <input type="text" class="form-control" id="nombreAsistente" name='nombre'
-                  placeholder="Indica tu nombre completo">
+                <!-- <textarea id="numerodeAsistentes" class="form-control" name="num_asistentes" id="" rows="2"
+                  placeholder="Indica el número de asistentes"></textarea> -->
+                  <input type="number" class="form-control" id="num_asistentes" name='num_asistentes'
+                  placeholder="Indica el número de personas que asistir&eacute;is a la ceremonia">
               </div>
 
-
               <div class="form-group">
-                <textarea id="comentariosAsistente" class="form-control" name="comentarios" id="" rows="2"
-                  placeholder="Indica algún dato importante"></textarea>
+                <textarea id="nombreAsistentes" class="form-control" name="nombres" id="" rows="2"
+                placeholder="Indica los nombres completos de los asistentes"></textarea>
               </div>
 
               <input id="eventoAsistencia" type="hidden" name="evento" value="">
@@ -994,7 +995,7 @@
         </div>
 
         <div class="modal-footer">
-          <a class="boton ampliar-mapa" target="_blank" href="#">Ampliar mapa</a>
+          <a class="boton ampliar-mapa" target="_blank" href="#">Abrir Google Maps</a>
         </div>
 
       </div>

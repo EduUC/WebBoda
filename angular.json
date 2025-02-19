@@ -27,7 +27,15 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "public/assets/css/addEvent.css",
+              "public/assets/css/aos.css",
+              "public/assets/css/bootstrap.css",
+              "public/assets/css/jquery-fancy-box.css",
+              "public/assets/css/style.css",
+              "public/assets/css/slick.css",
+              "public/assets/css/slick-theme.css",
+              "public/assets/css/responsive.css"
             ],
             "scripts": [
             ],

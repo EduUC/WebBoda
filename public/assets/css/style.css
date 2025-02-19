@@ -485,7 +485,7 @@
   ul.lang-inv {
     position: absolute;
     width: 100%;
-    top: -15px;
+    /* top: -15px; */
   }
   
   ul.lang-inv li {
@@ -1428,7 +1428,7 @@
   
   .modal .modal-content-2 .close {
     position: absolute;
-    top: -15px;
+    /* top: -15px; */
     right: 0;
     color: #fff;
     border-radius: 50%;
@@ -1649,7 +1649,7 @@
   
   
   #googleMap {
-    height: 300px;
+    max-height: 100%;
     width: 100%;
   }
   

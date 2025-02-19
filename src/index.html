@@ -16,14 +16,14 @@
 
 
 
-  <!-- Listado de css con version dinamica segun modificacion de archivo -->  
-  <link rel='stylesheet' href='/assets/css/addEvent.css' /> 
-  <link rel='stylesheet' href='/assets/css/aos.css' /> 
+  <!-- Listado de css con version dinamica segun modificacion de archivo -->
+  <link rel='stylesheet' href='/assets/css/addEvent.css' />
+  <link rel='stylesheet' href='/assets/css/aos.css' />
   <link rel='stylesheet' href='/assets/css/bootstrap.css' />
-  <link rel='stylesheet' href='/assets/css/jquery-fancy-box.css' /> 
-  <link rel='stylesheet' href='/assets/css/slick-theme.css' /> 
-  <link rel='stylesheet' href='/assets/css/slick.css' />  
-  <link rel='stylesheet' href='/assets/css/style.css' /> 
+  <link rel='stylesheet' href='/assets/css/jquery-fancy-box.css' />
+  <link rel='stylesheet' href='/assets/css/slick-theme.css' />
+  <link rel='stylesheet' href='/assets/css/slick.css' />
+  <link rel='stylesheet' href='/assets/css/style.css' />
   <link rel='stylesheet' href='/assets/css/responsive.css' />
 
   <!-- Color para navegadores moviles -->
@@ -167,7 +167,7 @@
   <!-- <script type='text/javascript' src='https://www.fixdate.io/modelo-invitacion/105/js/scripts.js?v=1679945418'></script> -->
 
 
-  
+
   <!-- Loader -->
   <script>
     var prealoaderOption = $(window);
@@ -514,7 +514,7 @@
         var rutaImgModalAsistencia = '/assets/img/img_circuloCeremonia.svg';
       }
 
-      $('#modalAsistencia .modal-title').text(titleModalAsistencia);
+      $('#modalAsistencia .modal-title').text('¿Asistirás a la ceremonia?');
       $('#modalAsistencia .img-top-modal img').attr('src', rutaImgModalAsistencia);
 
 
@@ -830,7 +830,7 @@
       }
 
       // Cambio titulo
-      $('#modalMapa .modal-title').text(titleModalMapa);
+      $('#modalMapa .modal-title').text('Cómo llegar a la Ceremonia');
 
       // Genero el link para ampliar mapa
       $('.ampliar-mapa').attr('href', 'https://www.google.com/maps/search/?api=1&query=' + latitudMapa + ',' + longitudMapa);
@@ -844,6 +844,8 @@
 
     });
   </script>
+
+
 
 
 
@@ -881,166 +883,23 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_3ZK1od6HtymslnbVFuzpUbMfrCRVqzM&callback=initMap&r=1448814899">
     </script>
 
+<script>
+  function initMap(latitud = 0, longitud = 0) {
+    var mapContainer = document.getElementById("googleMap");
 
-  <script>
-    // Config map
-    function initMap(latitud = 0, longitud = 0) {
-
-      var myLatLng = {
-        lat: latitud,
-        lng: longitud
-      };
-
-      var mapOptions = {
-        // How zoomed in you want the map to start at (always required)
-        zoom: 15,
-        scrollwheel: false,
-        disableDefaultUI: false,
-
-        // The latitude and longitude to center the map (always required)
-        center: new google.maps.LatLng(latitud, longitud),
-
-        // How you would like to style the map.
-        // This is where you would paste any style found on Snazzy Maps.
-        styles: [{
-          "featureType": "administrative",
-          "elementType": "labels.text.fill",
-          "stylers": [{
-            "color": "#6195a0"
-          }]
-        },
-        {
-          "featureType": "landscape",
-          "elementType": "all",
-          "stylers": [{
-            "color": "#f2f2f2"
-          }]
-        },
-        {
-          "featureType": "landscape",
-          "elementType": "geometry.fill",
-          "stylers": [{
-            "color": "#ffffff"
-          }]
-        },
-        {
-          "featureType": "poi",
-          "elementType": "all",
-          "stylers": [{
-            "visibility": "off"
-          }]
-        },
-        {
-          "featureType": "poi.park",
-          "elementType": "geometry.fill",
-          "stylers": [{
-            "color": "#e6f3d6"
-          },
-          {
-            "visibility": "on"
-          }
-          ]
-        },
-        {
-          "featureType": "road",
-          "elementType": "all",
-          "stylers": [{
-            "saturation": -100
-          },
-          {
-            "lightness": 45
-          },
-          {
-            "visibility": "simplified"
-          }
-          ]
-        },
-        {
-          "featureType": "road.highway",
-          "elementType": "all",
-          "stylers": [{
-            "visibility": "simplified"
-          }]
-        },
-        {
-          "featureType": "road.highway",
-          "elementType": "geometry.fill",
-          "stylers": [{
-            "color": "#f4d2c5"
-          },
-          {
-            "visibility": "simplified"
-          }
-          ]
-        },
-        {
-          "featureType": "road.highway",
-          "elementType": "labels.text",
-          "stylers": [{
-            "color": "#4e4e4e"
-          }]
-        },
-        {
-          "featureType": "road.arterial",
-          "elementType": "geometry.fill",
-          "stylers": [{
-            "color": "#f4f4f4"
-          }]
-        },
-        {
-          "featureType": "road.arterial",
-          "elementType": "labels.text.fill",
-          "stylers": [{
-            "color": "#787878"
-          }]
-        },
-        {
-          "featureType": "road.arterial",
-          "elementType": "labels.icon",
-          "stylers": [{
-            "visibility": "off"
-          }]
-        },
-        {
-          "featureType": "transit",
-          "elementType": "all",
-          "stylers": [{
-            "visibility": "off"
-          }]
-        },
-        {
-          "featureType": "water",
-          "elementType": "all",
-          "stylers": [{
-            "color": "#eaf6f8"
-          },
-          {
-            "visibility": "on"
-          }
-          ]
-        },
-        {
-          "featureType": "water",
-          "elementType": "geometry.fill",
-          "stylers": [{
-            "color": "#eaf6f8"
-          }]
-        }
-        ]
-
-      };
-
-      var mapElement = document.getElementById('googleMap');
-
-      var map = new google.maps.Map(mapElement, mapOptions);
-
-      var marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-      });
-
+    // Verifica si el contenedor del mapa existe
+    if (!mapContainer) {
+      console.error("No se encontró el contenedor del mapa.");
+      return;
     }
-  </script>
+
+    var apiKey = "AIzaSyCTb30TwfQI4csT1O0dxyEM1YfVNZGmiQM"; // 👈 Reemplaza con tu clave
+    var mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitud},${longitud}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7Clabel:C%7C${latitud},${longitud}&key=${apiKey}`;
+
+    // Insertar la imagen del mapa estático dentro del contenedor
+    mapContainer.innerHTML = `<img src="${mapUrl}" width="80%"  alt="Mapa de la ubicación">`;
+  }
+</script>
 
 
   <!-- AddEvent script -->
