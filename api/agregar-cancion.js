@@ -7,13 +7,12 @@ const app = express();
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
-let refreshToken = process.env.SPOTIFY_REFRESH_TOKEN || '';  // Obtiene el refresh_token de las variables de entorno
 
 // Middleware para procesar cuerpos JSON
 app.use(express.json());
 
 // Función para refrescar el access token usando el refresh token
-async function refreshAccessToken() {
+async function refreshAccessToken(refreshToken) {
     try {
         if (!refreshToken) {
             console.log("⚠️ No hay refresh token disponible. Se requiere autenticación.");
@@ -44,7 +43,7 @@ async function refreshAccessToken() {
 }
 
 // Función para verificar si la canción ya está en la playlist
-async function verificarCancionEnPlaylist(songId) {
+async function verificarCancionEnPlaylist(songId, accessToken) {
     try {
         let url = `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks?limit=100`;
         let canciones = [];
@@ -67,38 +66,33 @@ async function verificarCancionEnPlaylist(songId) {
 
 // Ruta para agregar una canción a la playlist con verificación de duplicados
 app.post('/api/agregar-cancion', async (req, res) => {
-    const { songId } = req.body;
+    const { songId, refreshToken } = req.body;
 
     if (!songId) {
         return res.status(400).json({ error: "ID de canción no proporcionado" });
     }
 
-    try {
-        let accessToken = await refreshAccessToken();
-        
-        if (!accessToken) {
-            return res.status(401).json({ error: "🔒 Usuario no autenticado. Visita /login para autenticarse en Spotify." });
-        }
+    let accessToken = await refreshAccessToken(refreshToken);
 
-        const existe = await verificarCancionEnPlaylist(songId);
-        
-        if (!existe) {
-            console.log(`🎵 Agregando canción ${songId} a la playlist ${PLAYLIST_ID}`);
+    if (!accessToken) {
+        return res.status(401).json({ error: "🔒 Usuario no autenticado. Visita /login para autenticarse en Spotify." });
+    }
 
-            const response = await axios.post(
-                `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks`,
-                { uris: [`spotify:track:${songId}`] },
-                { headers: { Authorization: `Bearer ${accessToken}` } }
-            );
+    const existe = await verificarCancionEnPlaylist(songId, accessToken);
 
-            console.log("✅ Canción agregada correctamente:", response.data);
-            return res.json({ message: "✅ Canción agregada a la playlist!" });
-        } else {
-            return res.json({ message: "⚠️ La canción ya está en la playlist. No se agregará nuevamente." });
-        }
-    } catch (error) {
-        console.error("❌ Error al agregar la canción:", error.response?.data || error.message);
-        res.status(500).json({ error: "Error al agregar la canción" });
+    if (!existe) {
+        console.log(`🎵 Agregando canción ${songId} a la playlist ${PLAYLIST_ID}`);
+
+        const response = await axios.post(
+            `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks`,
+            { uris: [`spotify:track:${songId}`] },
+            { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+
+        console.log("✅ Canción agregada correctamente:", response.data);
+        return res.json({ message: "✅ Canción agregada a la playlist!" });
+    } else {
+        return res.json({ message: "⚠️ La canción ya está en la playlist. No se agregará nuevamente." });
     }
 });
 

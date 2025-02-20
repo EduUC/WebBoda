@@ -33,17 +33,16 @@ app.get('/api/callback', async (req, res) => {
             }
         );
 
-        // Guardar los tokens en las variables de entorno de Vercel (solo durante la ejecución)
         const accessToken = tokenResponse.data.access_token;
         const refreshToken = tokenResponse.data.refresh_token;
 
-        // Setear las variables de entorno temporalmente para esta sesión
-        process.env.SPOTIFY_ACCESS_TOKEN = accessToken;
-        process.env.SPOTIFY_REFRESH_TOKEN = refreshToken;
-
+        // Puedes guardar el refreshToken y accessToken en una base de datos aquí para futuras sesiones
         console.log("✅ Tokens obtenidos correctamente!");
         console.log('Refresh Token:', refreshToken);
         console.log('Access Token:', accessToken);
+
+        // Como no podemos guardar variables de entorno dinámicamente en Vercel, simplemente los mostramos aquí.
+        // Si necesitas usarlos más adelante, es recomendable guardarlos en una base de datos o almacenamiento persistente.
 
         res.send("✅ Autenticación completada. Los tokens están guardados correctamente.");
     } catch (error) {
