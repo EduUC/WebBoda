@@ -1,40 +1,54 @@
 const axios = require('axios');
 const querystring = require('querystring');
+const fs = require('fs');
+const express = require('express');
+const app = express();
 
-module.exports = async (req, res) => {
-    const code = req.query.code || null;
+// Configura las credenciales de Spotify
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Asegúrate de que la URL sea la correcta
+const saveTokens = (refreshToken) => {
+    fs.writeFileSync('tokens.json', JSON.stringify({ refresh_token: refreshToken }));
+    console.log("💾 Refresh token guardado.");
+};
+
+// Ruta de callback que Spotify llamará después de la autenticación
+app.get('/api/callback', async (req, res) => {
+    const code = req.query.code;
 
     if (!code) {
-        return res.status(400).send("❌ No se proporcionó ningún código de autenticación.");
+        return res.status(400).send("❌ No se proporcionó el código de autenticación.");
     }
 
     try {
-        const tokenResponse = await axios.post(
+        const response = await axios.post(
             'https://accounts.spotify.com/api/token',
             querystring.stringify({
                 code: code,
-                redirect_uri: process.env.REDIRECT_URI,
-                grant_type: 'authorization_code'
+                redirect_uri: REDIRECT_URI,
+                grant_type: 'authorization_code',
             }),
             {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')
+                    'Authorization': 'Basic ' + Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
                 }
             }
         );
 
-        const accessToken = tokenResponse.data.access_token;
-        const refreshToken = tokenResponse.data.refresh_token;
+        const accessToken = response.data.access_token;
+        const refreshToken = response.data.refresh_token;
 
-        // Guardar el refresh token y access token como variables de entorno
-        process.env.SPOTIFY_ACCESS_TOKEN = accessToken;
-        process.env.SPOTIFY_REFRESH_TOKEN = refreshToken;
+        // Guarda el refresh token
+        saveTokens(refreshToken);
 
-        console.log("✅ Nuevo token de usuario obtenido:", accessToken);
+        console.log("✅ Tokens obtenidos correctamente!");
         res.send("✅ Autenticación completada. Ahora puedes cerrar esta ventana.");
     } catch (error) {
-        console.error("❌ Error al obtener el token de usuario:", error.response?.data || error.message);
-        res.status(500).send("Error al obtener el token de usuario");
+        console.error("❌ Error al obtener los tokens:", error);
+        res.status(500).send("❌ Error al obtener el token de usuario.");
     }
-};
+});
+
+module.exports = app;
