@@ -1,8 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "api/*.js": { "runtime": "@vercel/node" }
+  },
   "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" },
-    { "src": "angular.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
