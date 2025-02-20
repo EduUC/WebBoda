@@ -1,5 +1,15 @@
+res.setHeader("Access-Control-Allow-Origin", "*");
+res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+if (req.method === "OPTIONS") {
+    return res.status(200).end();
+}
+
+
 const axios = require('axios');
 const fs = require('fs');
+
 
 module.exports = async (req, res) => {
     const { songId } = req.query;
@@ -10,8 +20,14 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const tokens = JSON.parse(fs.readFileSync('api/tokens.json', 'utf8'));
-        const accessToken = tokens.access_token;
+        const { default: axios } = require('axios');
+        const refreshAccessToken = require('./refresh-token'); // Importamos la función de refresco
+
+        const accessToken = await refreshAccessToken();
+        if (!accessToken) {
+            return res.status(500).json({ error: "No se pudo obtener el token de Spotify" });
+        }
+
 
         let url = `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks?limit=100`;
         let canciones = [];
