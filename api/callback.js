@@ -1,27 +1,24 @@
 const axios = require('axios');
 const querystring = require('querystring');
-const fs = require('fs');
 const express = require('express');
 const app = express();
 
 // Configura las credenciales de Spotify
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Asegúrate de que la URL sea la correcta
-const saveTokens = (refreshToken) => {
-    fs.writeFileSync('tokens.json', JSON.stringify({ refresh_token: refreshToken }));
-    console.log("💾 Refresh token guardado.");
-};
+const REDIRECT_URI = 'https://webboda.vercel.app/api/callback'; // Debe ser tu URI de redirección
+const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;  // ID de la playlist
 
 // Ruta de callback que Spotify llamará después de la autenticación
 app.get('/api/callback', async (req, res) => {
-    const code = req.query.code;
+    const code = req.query.code; // El código que recibimos de Spotify
 
     if (!code) {
         return res.status(400).send("❌ No se proporcionó el código de autenticación.");
     }
 
     try {
+        // Obtenemos el access token y el refresh token usando el código de autenticación
         const response = await axios.post(
             'https://accounts.spotify.com/api/token',
             querystring.stringify({
@@ -40,8 +37,8 @@ app.get('/api/callback', async (req, res) => {
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
 
-        // Guarda el refresh token
-        saveTokens(refreshToken);
+        // Guardamos el refresh token como una variable de entorno en Vercel
+        process.env.SPOTIFY_REFRESH_TOKEN = refreshToken; // Vercel no permitirá guardar esto directamente, pero puedes acceder a esta variable en la siguiente solicitud
 
         console.log("✅ Tokens obtenidos correctamente!");
         res.send("✅ Autenticación completada. Ahora puedes cerrar esta ventana.");

@@ -1,41 +1,12 @@
-require('dotenv').config();
-const express = require('express');
 const axios = require('axios');
-const querystring = require('querystring');
-const fs = require('fs');  // Para guardar el refresh token
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Configurar credenciales de Spotify
+// Configura las credenciales de Spotify
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // URL del callback (modifica si usas localhost)
 const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
+let refreshToken = process.env.SPOTIFY_REFRESH_TOKEN || '';  // Obtiene el refresh_token de las variables de entorno
 
-let accessToken = '';
-let refreshToken = '';
-
-// Función para cargar el refresh_token desde el archivo
-function loadTokens() {
-    try {
-        const data = fs.readFileSync('tokens.json', 'utf8');
-        const tokens = JSON.parse(data);
-        refreshToken = tokens.refresh_token || '';
-        console.log("🔄 Refresh token cargado desde el archivo.");
-    } catch (error) {
-        console.log("⚠️ No hay refresh token guardado. Se requiere autenticación.");
-    }
-}
-
-// Función para guardar el refresh_token en un archivo
-function saveTokens(refreshToken) {
-    fs.writeFileSync('tokens.json', JSON.stringify({ refresh_token: refreshToken }));
-    console.log("💾 Refresh token guardado en tokens.json.");
-}
-
-// Función para refrescar el token de acceso
+// Función para refrescar el access token usando el refresh token
 async function refreshAccessToken() {
     try {
         if (!refreshToken) {
@@ -57,7 +28,7 @@ async function refreshAccessToken() {
             }
         );
 
-        accessToken = response.data.access_token;
+        const accessToken = response.data.access_token;
         console.log("🔄 Token de acceso actualizado:", accessToken);
         return accessToken;
     } catch (error) {
@@ -66,7 +37,7 @@ async function refreshAccessToken() {
     }
 }
 
-// Función para verificar si una canción ya está en la playlist
+// Función para verificar si la canción ya está en la playlist
 async function verificarCancionEnPlaylist(songId) {
     try {
         let url = `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks?limit=100`;
@@ -88,7 +59,7 @@ async function verificarCancionEnPlaylist(songId) {
     }
 }
 
-// Ruta para agregar una canción a la playlist
+// Ruta para agregar una canción a la playlist con verificación de duplicados
 app.post('/api/agregar-cancion', async (req, res) => {
     const { songId } = req.body;
 
@@ -106,7 +77,7 @@ app.post('/api/agregar-cancion', async (req, res) => {
         }
 
         const existe = await verificarCancionEnPlaylist(songId);
-
+        
         if (!existe) {
             console.log(`🎵 Agregando canción ${songId} a la playlist ${PLAYLIST_ID}`);
 
@@ -126,8 +97,3 @@ app.post('/api/agregar-cancion', async (req, res) => {
         res.status(500).json({ error: "Error al agregar la canción" });
     }
 });
-
-// Cargar refresh token al iniciar el servidor
-loadTokens();
-
-module.exports = app;
