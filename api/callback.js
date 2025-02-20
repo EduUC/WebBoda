@@ -42,8 +42,8 @@ app.get('/api/callback', async (req, res) => {
         process.env.SPOTIFY_REFRESH_TOKEN = refreshToken;
 
         console.log("✅ Tokens obtenidos correctamente!");
-        console.log('Refresh Token:', refresh_token);
-        console.log('Access Token:', access_token);
+        console.log('Refresh Token:', refreshToken);
+        console.log('Access Token:', accessToken);
 
         res.send("✅ Autenticación completada. Los tokens están guardados correctamente.");
     } catch (error) {
