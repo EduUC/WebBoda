@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class SongService {
-  private apiUrl = 'http://localhost:3000/api/agregar-cancion';
+  private apiUrl = 'https://webboda.app/api/agregar-cancion';
 
   constructor(private http: HttpClient) {}
 
