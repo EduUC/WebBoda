@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SongService {
-  private apiUrl = 'https://webboda.app/api/agregar-cancion'; // Cambia esto si el backend está en otro lado
+  private apiUrl = 'https://webboda.vercel.app/api/agregar-cancion'; // Cambia esto si el backend está en otro lado
 
   constructor(private http: HttpClient) {}
 
