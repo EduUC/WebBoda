@@ -1,12 +1,3 @@
-res.setHeader("Access-Control-Allow-Origin", "*");
-res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-if (req.method === "OPTIONS") {
-    return res.status(200).end();
-}
-
-
 const axios = require('axios');
 
 const refreshAccessToken = async () => {
@@ -33,10 +24,18 @@ const refreshAccessToken = async () => {
     }
 };
 
-module.exports = async (req, res) => {
+module.exports.handler = async (event, context) => {
     const accessToken = await refreshAccessToken();
+
     if (!accessToken) {
-        return res.status(500).json({ error: "Error al obtener el token de Spotify" });
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Error al obtener el token de Spotify" }),
+        };
     }
-    res.json({ access_token: accessToken });
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ access_token: accessToken }),
+    };
 };
