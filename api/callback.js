@@ -5,8 +5,8 @@ const fs = require('fs');
 module.exports = async (req, res) => {
     const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
     const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-    // const REDIRECT_URI = process.env.REDIRECT_URI || 'https://tu-proyecto.vercel.app/api/callback';
-    const REDIRECT_URI = 'http://localhost:3000/callback';
+    const REDIRECT_URI = process.env.REDIRECT_URI || 'https://tu-proyecto.vercel.app/api/callback';
+    // const REDIRECT_URI = 'http://localhost:3000/callback';
     
     const code = req.query.code || null;
 
