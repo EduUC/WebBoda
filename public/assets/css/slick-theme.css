@@ -74,11 +74,11 @@
 }
 .slick-prev:before
 {
-    content: 'â†';
+    content: '•';
 }
 [dir='rtl'] .slick-prev:before
 {
-    content: 'â†’';
+    content: '•';
 }
 
 .slick-next
@@ -92,11 +92,11 @@
 }
 .slick-next:before
 {
-    content: 'â†’';
+    content: '•';
 }
 [dir='rtl'] .slick-next:before
 {
-    content: 'â†';
+    content: '•';
 }
 
 /* Dots */
@@ -164,7 +164,7 @@
 .slick-dots li button:before
 {
     font-family: 'slick';
-    font-size: 6px;
+    font-size: 16px;
     line-height: 20px;
 
     position: absolute;
@@ -174,7 +174,7 @@
     width: 10px;
     height: 10px;
 
-    content: 'â€¢';
+    content: '•';
     text-align: center;
 
     opacity: .25;
