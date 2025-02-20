@@ -1,40 +1,39 @@
-const axios = require('axios');  // Asegúrate de importar axios
+const axios = require('axios');
 const querystring = require('querystring');
 
-module.exports = async (req, res) => {
-    const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
-    const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-    const REDIRECT_URI = process.env.REDIRECT_URI || 'https://webboda.vercel.app/api/callback';
-    
-    const code = req.query.code || null;
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI || 'https://webboda.vercel.app/api/callback';
 
-    if (!code) {
-        return res.status(400).send("❌ No se proporcionó código de autenticación.");
-    }
+// Aquí obtienes el refresh_token que guardaste anteriormente
+const REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN; // Asegúrate de guardarlo correctamente en las variables de entorno o en una base de datos
 
-    try {
-        const tokenResponse = await axios.post(
-            'https://accounts.spotify.com/api/token',
-            querystring.stringify({
-                code: code,
-                redirect_uri: REDIRECT_URI,
-                grant_type: 'authorization_code'
-            }),
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
-                }
-            }
-        );
+const refreshAccessToken = async () => {
+    if (REFRESH_TOKEN) {
+        console.log("Refrescando el token de acceso...");
 
-        const refreshToken = tokenResponse.data.refresh_token;
-        console.log("✅ Refresh Token obtenido:", refreshToken);
+        try {
+            const response = await axios.post(
+                'https://accounts.spotify.com/api/token',
+                new URLSearchParams({
+                    grant_type: 'refresh_token',
+                    refresh_token: REFRESH_TOKEN, // Usas el refresh_token guardado
+                    client_id: CLIENT_ID,
+                    client_secret: CLIENT_SECRET,
+                }),
+                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+            );
 
-        return res.json({ message: "✅ Autenticación completada", refresh_token: refreshToken });
-
-    } catch (error) {
-        console.error("❌ Error en autenticación:", error.response?.data || error.message);
-        return res.status(500).send("Error en autenticación.");
+            const accessToken = response.data.access_token; // Este es el nuevo access_token
+            return accessToken; // Devuelves el nuevo access_token
+        } catch (error) {
+            console.error("❌ Error al refrescar el token:", error.response?.data || error.message);
+            return null;
+        }
+    } else {
+        console.log("No se encontró el refresh_token.");
+        return null;
     }
 };
+
+module.exports = refreshAccessToken;
