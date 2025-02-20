@@ -3,7 +3,7 @@ const querystring = require('querystring');
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:3000/callback'; // Cambia esta URI a tu URI real
+const REDIRECT_URI = process.env.REDIRECT_URI || 'https://webboda.vercel.app/api/callback'; // Cambia esta URI a tu URI real
 const REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN;
 
 const refreshAccessToken = async () => {
