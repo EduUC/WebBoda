@@ -350,15 +350,16 @@
   <!-- Animacion galeria -->
   <script>
     let svgContainerGaleria = document.querySelector('.anim-galeria');
+    setTimeout(() => {
+      let animGaleria = bodymovin.loadAnimation({
+        wrapper: svgContainerGaleria,
+        animType: 'svg',
+        loop: true,
+        path: "assets/json/json_camara.json"
+      });
 
-    let animGaleria = bodymovin.loadAnimation({
-      wrapper: svgContainerGaleria,
-      animType: 'svg',
-      loop: true,
-      path: "assets/json/json_camara.json"
-    });
-
-    animGaleria.play();
+      animGaleria.play();
+    }, 1000);
   </script>
 
 
@@ -456,36 +457,38 @@
 
   <!-- Opciones carrusel galeria -->
   <script>
-    $('.carrusel-fotos').slick({
-      lazyLoad: 'ondemand',
-      autoplay: true,
-      autoplaySpeed: 2000,
-      centerMode: true,
-      dots: true,
-      centerPadding: '20px',
-      slidesToShow: 3,
-      prevArrow: false,
-      nextArrow: false,
-      responsive: [{
-        breakpoint: 768,
-        settings: {
-          arrows: false,
-          centerMode: true,
-          centerPadding: '40px',
-          slidesToShow: 3
+    setTimeout(() => {
+      $('.carrusel-fotos').slick({
+        lazyLoad: 'ondemand',
+        autoplay: true,
+        autoplaySpeed: 2000,
+        centerMode: true,
+        dots: true,
+        centerPadding: '20px',
+        slidesToShow: 3,
+        prevArrow: false,
+        nextArrow: false,
+        responsive: [{
+          breakpoint: 768,
+          settings: {
+            arrows: false,
+            centerMode: true,
+            centerPadding: '40px',
+            slidesToShow: 3
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            arrows: false,
+            centerMode: true,
+            centerPadding: '40px',
+            slidesToShow: 1
+          }
         }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          arrows: false,
-          centerMode: true,
-          centerPadding: '40px',
-          slidesToShow: 1
-        }
-      }
-      ]
-    });
+        ]
+      });
+    }, 1000);
   </script>
 
 
@@ -883,23 +886,23 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_3ZK1od6HtymslnbVFuzpUbMfrCRVqzM&callback=initMap&r=1448814899">
     </script>
 
-<script>
-  function initMap(latitud = 0, longitud = 0) {
-    var mapContainer = document.getElementById("googleMap");
+  <script>
+    function initMap(latitud = 0, longitud = 0) {
+      var mapContainer = document.getElementById("googleMap");
 
-    // Verifica si el contenedor del mapa existe
-    if (!mapContainer) {
-      console.error("No se encontró el contenedor del mapa.");
-      return;
+      // Verifica si el contenedor del mapa existe
+      if (!mapContainer) {
+        console.error("No se encontró el contenedor del mapa.");
+        return;
+      }
+
+      var apiKey = "AIzaSyCTb30TwfQI4csT1O0dxyEM1YfVNZGmiQM"; // 👈 Reemplaza con tu clave
+      var mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitud},${longitud}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7Clabel:C%7C${latitud},${longitud}&key=${apiKey}`;
+
+      // Insertar la imagen del mapa estático dentro del contenedor
+      mapContainer.innerHTML = `<img src="${mapUrl}" width="80%"  alt="Mapa de la ubicación">`;
     }
-
-    var apiKey = "AIzaSyCTb30TwfQI4csT1O0dxyEM1YfVNZGmiQM"; // 👈 Reemplaza con tu clave
-    var mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitud},${longitud}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7Clabel:C%7C${latitud},${longitud}&key=${apiKey}`;
-
-    // Insertar la imagen del mapa estático dentro del contenedor
-    mapContainer.innerHTML = `<img src="${mapUrl}" width="80%"  alt="Mapa de la ubicación">`;
-  }
-</script>
+  </script>
 
 
   <!-- AddEvent script -->
