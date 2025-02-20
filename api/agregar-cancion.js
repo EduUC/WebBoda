@@ -1,10 +1,16 @@
 const axios = require('axios');
+const express = require('express');
+const querystring = require('querystring');
+const app = express();
 
 // Configura las credenciales de Spotify
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
 let refreshToken = process.env.SPOTIFY_REFRESH_TOKEN || '';  // Obtiene el refresh_token de las variables de entorno
+
+// Middleware para procesar cuerpos JSON
+app.use(express.json());
 
 // Función para refrescar el access token usando el refresh token
 async function refreshAccessToken() {
@@ -68,12 +74,10 @@ app.post('/api/agregar-cancion', async (req, res) => {
     }
 
     try {
+        let accessToken = await refreshAccessToken();
+        
         if (!accessToken) {
-            console.log("🔄 Intentando refrescar el token...");
-            const newAccessToken = await refreshAccessToken();
-            if (!newAccessToken) {
-                return res.status(401).json({ error: "🔒 Usuario no autenticado. Visita /login para autenticarse en Spotify." });
-            }
+            return res.status(401).json({ error: "🔒 Usuario no autenticado. Visita /login para autenticarse en Spotify." });
         }
 
         const existe = await verificarCancionEnPlaylist(songId);
@@ -96,4 +100,10 @@ app.post('/api/agregar-cancion', async (req, res) => {
         console.error("❌ Error al agregar la canción:", error.response?.data || error.message);
         res.status(500).json({ error: "Error al agregar la canción" });
     }
+});
+
+// Configurar puerto
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
