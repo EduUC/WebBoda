@@ -183,7 +183,4 @@ loadTokens();
 
 // 📌 9️⃣ Iniciar el servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`🔗 Autenticación de usuario: http://localhost:${PORT}/login`);
-});
+module.exports = app;
