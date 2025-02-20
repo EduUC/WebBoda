@@ -1,33 +1,30 @@
-res.setHeader("Access-Control-Allow-Origin", "*");
-res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-if (req.method === "OPTIONS") {
-    return res.status(200).end();
-}
-
-
 const axios = require('axios');
-const fs = require('fs');
+const refreshAccessToken = require('./refresh-token'); // Importamos la función de refresco
 
 module.exports = async (req, res) => {
-    const { songId } = req.body;
-    const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
+    // Habilitar CORS correctamente
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    if (!songId) {
-        return res.status(400).json({ error: "ID de canción no proporcionado" });
+    // Manejar preflight request de CORS
+    if (req.method === "OPTIONS") {
+        return res.status(200).end();
     }
 
     try {
-        const { default: axios } = require('axios');
-        const refreshAccessToken = require('./refresh-token'); // Importamos la función de refresco
+        const { songId } = req.body;
+        const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
 
+        if (!songId) {
+            return res.status(400).json({ error: "ID de canción no proporcionado" });
+        }
+
+        // Obtener un nuevo Access Token
         const accessToken = await refreshAccessToken();
         if (!accessToken) {
             return res.status(500).json({ error: "No se pudo obtener el token de Spotify" });
         }
-
-
 
         // Verificar si la canción ya está en la playlist
         let url = `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks?limit=100`;
@@ -60,6 +57,6 @@ module.exports = async (req, res) => {
 
     } catch (error) {
         console.error("❌ Error al agregar la canción:", error.response?.data || error.message);
-        res.status(500).json({ error: "Error al agregar la canción" });
+        return res.status(500).json({ error: error.response?.data || "Error al agregar la canción" });
     }
 };
