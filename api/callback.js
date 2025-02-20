@@ -1,25 +1,24 @@
 const axios = require('axios');
-const querystring = require('querystring');
 const express = require('express');
+const querystring = require('querystring');
 const app = express();
 
 // Configura las credenciales de Spotify
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://webboda.vercel.app/api/callback'; // Debe ser tu URI de redirección
-const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;  // ID de la playlist
+const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Cambia según tu configuración
 
-// Ruta de callback que Spotify llamará después de la autenticación
+// Ruta para manejar el callback de Spotify
 app.get('/api/callback', async (req, res) => {
-    const code = req.query.code; // El código que recibimos de Spotify
+    const code = req.query.code || null;
 
     if (!code) {
-        return res.status(400).send("❌ No se proporcionó el código de autenticación.");
+        return res.status(400).send("❌ No se proporcionó ningún código de autenticación.");
     }
 
     try {
-        // Obtenemos el access token y el refresh token usando el código de autenticación
-        const response = await axios.post(
+        // Solicita el access token y refresh token de Spotify
+        const tokenResponse = await axios.post(
             'https://accounts.spotify.com/api/token',
             querystring.stringify({
                 code: code,
@@ -34,18 +33,24 @@ app.get('/api/callback', async (req, res) => {
             }
         );
 
-        const accessToken = response.data.access_token;
-        const refreshToken = response.data.refresh_token;
+        // Guardar los tokens en las variables de entorno de Vercel (solo durante la ejecución)
+        const accessToken = tokenResponse.data.access_token;
+        const refreshToken = tokenResponse.data.refresh_token;
 
-        // Guardamos el refresh token como una variable de entorno en Vercel
-        process.env.SPOTIFY_REFRESH_TOKEN = refreshToken; // Vercel no permitirá guardar esto directamente, pero puedes acceder a esta variable en la siguiente solicitud
+        // Setear las variables de entorno temporalmente para esta sesión
+        process.env.SPOTIFY_ACCESS_TOKEN = accessToken;
+        process.env.SPOTIFY_REFRESH_TOKEN = refreshToken;
 
         console.log("✅ Tokens obtenidos correctamente!");
-        res.send("✅ Autenticación completada. Ahora puedes cerrar esta ventana.");
+        res.send("✅ Autenticación completada. Los tokens están guardados correctamente.");
     } catch (error) {
-        console.error("❌ Error al obtener los tokens:", error);
-        res.status(500).send("❌ Error al obtener el token de usuario.");
+        console.error("❌ Error al obtener los tokens:", error.message);
+        res.status(500).send("Error al obtener los tokens.");
     }
 });
 
-module.exports = app;
+// Configurar puerto
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
