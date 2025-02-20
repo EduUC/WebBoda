@@ -24,18 +24,4 @@ const refreshAccessToken = async () => {
     }
 };
 
-module.exports.handler = async (event, context) => {
-    const accessToken = await refreshAccessToken();
-
-    if (!accessToken) {
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: "Error al obtener el token de Spotify" }),
-        };
-    }
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ access_token: accessToken }),
-    };
-};
+module.exports = refreshAccessToken; // Exportar directamente la función
