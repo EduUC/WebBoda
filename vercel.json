@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "functions": {
-    "api/*.js": { "runtime": "@vercel/node" }
-  },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "builds": [
+    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "angular.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
-
