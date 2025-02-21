@@ -1,19 +1,14 @@
 const express = require('express');
 const axios = require('axios');
 const querystring = require('querystring');
-const supabase = require('./supabase'); // Asegúrate de importar correctamente el cliente de Supabase
-const loginRouter = require('./login');  // Importa las rutas de login.js
+const supabase = require('./supabase');
+const router = express.Router();
 
-const app = express();
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Cambia esto si usas localhost
+const REDIRECT_URI = process.env.REDIRECT_URI;
 
-// Usa las rutas del login
-app.use('/api', loginRouter);  // Se asegura de que las rutas de login estén en /api
-
-// Esta es la ruta de callback que debe ser independiente
-app.get('/api/callback', async (req, res) => {
+router.get('/', async (req, res) => {
     const code = req.query.code || null;
 
     if (!code) {
@@ -40,17 +35,14 @@ app.get('/api/callback', async (req, res) => {
         const accessToken = tokenResponse.data.access_token;
         const refreshToken = tokenResponse.data.refresh_token;
 
-        // Guarda los tokens en Supabase
+        // Guardar tokens en Supabase
         const { data, error } = await supabase
             .from('spotify_tokens')
-            .upsert([
-                { id: '1', access_token: accessToken, refresh_token: refreshToken, updated_at: new Date() }
-            ], { onConflict: ['id'] });
+            .upsert([{ id: '1', access_token: accessToken, refresh_token: refreshToken, updated_at: new Date() }], { onConflict: ['id'] });
 
         if (error) throw error;
 
         console.log("✅ Tokens guardados en Supabase!");
-
         res.send("✅ Autenticación completada. Tokens guardados correctamente.");
     } catch (error) {
         console.error("❌ Error al obtener los tokens:", error.message);
@@ -58,8 +50,4 @@ app.get('/api/callback', async (req, res) => {
     }
 });
 
-// Configura el puerto
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+module.exports = router;
