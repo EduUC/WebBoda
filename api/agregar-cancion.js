@@ -33,14 +33,28 @@ async function refreshAccessToken(refreshToken) {
             }
         );
 
-        const accessToken = response.data.access_token;
-        console.log("🔄 Token de acceso actualizado:", accessToken);
-        return accessToken;
+        const newAccessToken = response.data.access_token;
+
+        // 🟢 Guardar el nuevo access token en Supabase
+        const { error } = await supabase
+            .from('spotify_tokens')
+            .update({ access_token: newAccessToken, updated_at: new Date() })
+            .eq('id', '1');
+
+        if (error) {
+            console.error("❌ Error al actualizar el access token en Supabase:", error.message);
+        } else {
+            console.log("✅ Nuevo access token guardado en Supabase.");
+        }
+
+        return newAccessToken;
     } catch (error) {
         console.error("❌ Error al refrescar el token:", error.response?.data || error.message);
         return null;
     }
 }
+
+
 
 // Función para verificar si la canción ya está en la playlist
 async function verificarCancionEnPlaylist(songId, accessToken) {
@@ -66,18 +80,25 @@ async function verificarCancionEnPlaylist(songId, accessToken) {
 
 // Ruta para agregar una canción a la playlist con verificación de duplicados
 app.post('/api/agregar-cancion', async (req, res) => {
-    const { songId, refreshToken } = req.body;
+    const { songId } = req.body;
 
     if (!songId) {
         return res.status(400).json({ error: "ID de canción no proporcionado" });
     }
 
-    let accessToken = await refreshAccessToken(refreshToken);
-
-    if (!accessToken) {
-        return res.status(401).json({ error: "🔒 Usuario no autenticado. Visita /login para autenticarse en Spotify." });
+    // Obtiene los tokens desde Supabase
+    const tokens = await obtenerTokensDesdeSupabase();
+    if (!tokens) {
+        return res.status(401).json({ error: "🔒 No se encontraron tokens. Inicia sesión nuevamente en Spotify." });
     }
 
+    // Refrescar el access token si es necesario
+    let accessToken = await refreshAccessToken(tokens.refresh_token);
+    if (!accessToken) {
+        return res.status(401).json({ error: "🔒 No se pudo refrescar el token. Inicia sesión nuevamente en Spotify." });
+    }
+
+    // Verifica si la canción ya está en la playlist
     const existe = await verificarCancionEnPlaylist(songId, accessToken);
 
     if (!existe) {
@@ -96,8 +117,26 @@ app.post('/api/agregar-cancion', async (req, res) => {
     }
 });
 
+
 // Configurar puerto
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function obtenerTokensDesdeSupabase() {
+    const { data, error } = await supabase
+        .from('spotify_tokens')
+        .select('access_token, refresh_token')
+        .eq('id', '1') // Asegúrate de que este ID coincide con el que guardaste en callback.js
+        .single();
+
+    if (error || !data) {
+        console.error("❌ Error al obtener los tokens desde Supabase:", error?.message || "No se encontraron tokens.");
+        return null;
+    }
+
+    return data;
+}

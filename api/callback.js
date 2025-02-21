@@ -1,14 +1,3 @@
-const axios = require('axios');
-const express = require('express');
-const querystring = require('querystring');
-const app = express();
-
-// Configura las credenciales de Spotify
-const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
-const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Cambia según tu configuración
-
-// Ruta para manejar el callback de Spotify
 app.get('/api/callback', async (req, res) => {
     const code = req.query.code || null;
 
@@ -36,23 +25,20 @@ app.get('/api/callback', async (req, res) => {
         const accessToken = tokenResponse.data.access_token;
         const refreshToken = tokenResponse.data.refresh_token;
 
-        // Puedes guardar el refreshToken y accessToken en una base de datos aquí para futuras sesiones
-        console.log("✅ Tokens obtenidos correctamente!");
-        console.log('Refresh Token:', refreshToken);
-        console.log('Access Token:', accessToken);
+        // Guarda los tokens en Supabase
+        const { data, error } = await supabase
+            .from('spotify_tokens')
+            .upsert([
+                { id: '1', access_token: accessToken, refresh_token: refreshToken, updated_at: new Date() }
+            ], { onConflict: ['id'] });
 
-        // Como no podemos guardar variables de entorno dinámicamente en Vercel, simplemente los mostramos aquí.
-        // Si necesitas usarlos más adelante, es recomendable guardarlos en una base de datos o almacenamiento persistente.
+        if (error) throw error;
 
-        res.send("✅ Autenticación completada. Los tokens están guardados correctamente.");
+        console.log("✅ Tokens guardados en Supabase!");
+
+        res.send("✅ Autenticación completada. Tokens guardados correctamente.");
     } catch (error) {
         console.error("❌ Error al obtener los tokens:", error.message);
         res.status(500).send("Error al obtener los tokens.");
     }
-});
-
-// Configurar puerto
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
