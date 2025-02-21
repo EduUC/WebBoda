@@ -1,6 +1,7 @@
 const axios = require('axios');
 const express = require('express');
 const querystring = require('querystring');
+const supabase = require('./supabase'); // Asegúrate de que esta línea esté presente para importar el cliente de Supabase
 const app = express();
 
 // Configura las credenciales de Spotify
@@ -53,8 +54,6 @@ async function refreshAccessToken(refreshToken) {
         return null;
     }
 }
-
-
 
 // Función para verificar si la canción ya está en la playlist
 async function verificarCancionEnPlaylist(songId, accessToken) {
@@ -117,15 +116,13 @@ app.post('/api/agregar-cancion', async (req, res) => {
     }
 });
 
-
 // Configurar puerto
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Función para obtener los tokens desde Supabase
 async function obtenerTokensDesdeSupabase() {
     const { data, error } = await supabase
         .from('spotify_tokens')

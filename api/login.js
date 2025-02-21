@@ -1,11 +1,11 @@
 const querystring = require('querystring');
 const express = require('express');
-const app = express();
+const router = express.Router();  // Usamos Router para exportar solo las rutas
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Cambia esto si usas localhost
 
-app.get('/api/login', (req, res) => {
+router.get('/login', (req, res) => {
     const scope = 'playlist-modify-public playlist-modify-private';
     const authUrl = `https://accounts.spotify.com/authorize?` + querystring.stringify({
         response_type: 'code',
@@ -16,4 +16,4 @@ app.get('/api/login', (req, res) => {
     res.redirect(authUrl);
 });
 
-module.exports = app;
+module.exports = router;  // Exporta solo el router

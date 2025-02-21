@@ -1,3 +1,17 @@
+const express = require('express');
+const axios = require('axios');
+const querystring = require('querystring');
+const supabase = require('./supabase'); // Asegúrate de importar correctamente el cliente de Supabase
+const loginRouter = require('./login');  // Importa las rutas de login.js
+
+const app = express();
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Cambia esto si usas localhost
+
+// Usa las rutas del login
+app.use('/api', loginRouter);
+
 app.get('/api/callback', async (req, res) => {
     const code = req.query.code || null;
 
@@ -41,4 +55,10 @@ app.get('/api/callback', async (req, res) => {
         console.error("❌ Error al obtener los tokens:", error.message);
         res.status(500).send("Error al obtener los tokens.");
     }
+});
+
+// Configura el puerto
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
