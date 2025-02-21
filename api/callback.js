@@ -10,8 +10,9 @@ const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const REDIRECT_URI = 'https://webboda.vercel.app/api/callback';  // Cambia esto si usas localhost
 
 // Usa las rutas del login
-app.use('/api', loginRouter);
+app.use('/api', loginRouter);  // Se asegura de que las rutas de login estén en /api
 
+// Esta es la ruta de callback que debe ser independiente
 app.get('/api/callback', async (req, res) => {
     const code = req.query.code || null;
 
