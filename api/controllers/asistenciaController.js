@@ -1,5 +1,4 @@
-const { get } = require('http');
-const { agregarAsistencia } = require('../services/asistenciaClient');
+const { agregarAsistencia, gettable} = require('../services/asistenciaClient');
 
 const addAsistencia = (req, res) => {
     console.log("✅ POST addAsistencia");
