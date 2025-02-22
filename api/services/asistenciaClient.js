@@ -32,6 +32,8 @@ async function gettable() {
             return null;
         }
 
+        console.log("✅ Datos obtenidos de la tabla asistencia:", asistencia);
+
         return asistencia; // Devuelve toda la data de la tabla
     } catch (err) {
         console.error("Error al obtener datos:", err);
