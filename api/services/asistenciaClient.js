@@ -22,17 +22,23 @@ async function agregarAsistencia(nombre, confirmacion) {
 }
 
 async function gettable() {
-    const { data: asistencia, error } = await supabase
-        .from('asistencia')
-        .select('*');
+    try {
+        const { data: asistencia, error } = await supabase
+            .from('asistencia')
+            .select('*');
+        
+        if (error || !asistencia.length) {
+            console.error("❌ Error al obtener los datos:", error);
+            return null;
+        }
 
-    if (error || !asistencia.length) {
-        console.error("❌ Error al obtener los datos:", error);
+        return asistencia; // Devuelve toda la data de la tabla
+    } catch (err) {
+        console.error("Error al obtener datos:", err);
         return null;
     }
-
-    return asistencia; // Devuelve toda la data de la tabla
 }
+
 
 
 
