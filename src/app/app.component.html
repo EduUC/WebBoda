@@ -258,17 +258,17 @@
 
             </a>
           </div>
-
+          
           <div class="info-box">
-            <h6>Lugar</h6>
-            <p>El Invernadero,<br>Huerto de Santa Mar&iacute;a</p>
-            <a href="#" data-evento="Ceremonia" class="boton confirmar-asistencia">Confirmar asistencia</a>
+            <h6>Dirección</h6>
+            <p>C/ Puig de Cebolla 4 <br>El Puig</p>
+            <a href="#" data-evento="Ceremonia" class="boton modal-como-llegar">¿C&oacute;mo llegar?</a>
           </div>
 
           <div class="info-box">
-            <h6>Dirección</h6>
-            <p>C/ Puig de Cebolla 4 - El Puig</p>
-            <a href="#" data-evento="Ceremonia" class="boton modal-como-llegar">¿C&oacute;mo llegar?</a>
+            <h6>Lugar de la Ceremonia</h6>
+            <p>El Invernadero,<br>Huerto de Santa Mar&iacute;a</p>
+            <a href="#" data-evento="Ceremonia" class="boton confirmar-asistencia">Confirmar asistencia</a>
           </div>
 
         </div>
@@ -301,15 +301,15 @@
           </div>
 
           <div class="info-box">
-            <h6>Lugar</h6>
-            <p>La Font Blanca,<br>Huerto de Santa Mar&iacute;a</p>
-            <a href="#" data-evento="Fiesta" class="boton confirmar-asistencia">Confirmar asistencia</a>
+            <h6>¿Qu&eacute; haremos?</h6>
+            <p>Aqu&iacute; os dejamos un poquito de info <br> de lo que haremos en la boda</p>
+            <a href="#" data-evento="Fiesta" class="boton modal-info">Info</a>
           </div>
 
           <div class="info-box">
-            <h6>Dirección</h6>
-            <p>C/ Puig de Cebolla 4 - El Puig</p>
-            <a href="#" data-evento="Fiesta" class="boton modal-como-llegar">¿Cómo llegar?</a>
+            <h6>Lugar de la Fiesta</h6>
+            <p>La Font Blanca,<br>Huerto de Santa Mar&iacute;a</p>
+            <a href="#" data-evento="Fiesta" class="boton confirmar-asistencia">Confirmar asistencia</a>
           </div>
 
         </div>
@@ -476,7 +476,7 @@
 
       <br>
 
-      <a href="#" class="boton modal-regalos">Número de IBAN y lista de regalos</a>
+      <a href="#" class="boton modal-regalos">Número de IBAN</a>
 
     </div>
   </div>
@@ -628,7 +628,7 @@
 
           <div class="formulario-content">
 
-            <form id="formAsistencia" action="">
+            <form id="formAsistencia" oninput="verificarCampos()" action="" enctype="multipart/form-data">
 
 
               <div class="form-group d-flex justify-content-around custom-control custom-radio custom-control-inline">
@@ -646,22 +646,12 @@
               </div>
 
               <div class="form-group">
-                <!-- <textarea id="numerodeAsistentes" class="form-control" name="num_asistentes" id="" rows="2"
-                  placeholder="Indica el número de asistentes"></textarea> -->
-                  <input type="number" class="form-control" id="num_asistentes" name='num_asistentes'
-                  placeholder="Indica el número de personas que asistir&eacute;is a la ceremonia">
+                  <input type="number" class="form-control" id="num_asistentes" min="1" max="9" name='num_asistentes'
+                  placeholder="Indica el número de personas que asistir&eacute;is a la ceremonia" oninput="validarMaximo()">
               </div>
 
-              <div class="form-group">
-                <textarea id="nombreAsistentes" class="form-control" name="nombres" id="" rows="2"
-                placeholder="Indica los nombres completos de los asistentes"></textarea>
+              <div id="personas-container" class="form-group">
               </div>
-
-              <input id="eventoAsistencia" type="hidden" name="evento" value="">
-              <input type="hidden" name="invitacion" value="">
-              <input type="hidden" name="token" value="">
-              <input type="hidden" name="lang" value="es">
-              <input type="hidden" name="country" value="es">
 
             </form>
 
@@ -672,7 +662,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" id="sendAsistencia" class="boton">Enviar</button>
+          <button type="button" id="sendAsistencia" class="boton" disabled>Enviar</button>
         </div>
 
       </div>
@@ -929,6 +919,46 @@
         <div class="modal-footer">
           <a class="boton ampliar-mapa" target="_blank" href="#">Abrir Google Maps</a>
         </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Info -->
+<div id="modalInfo" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-content-2">
+
+        <picture>
+          <source type="image/webp" srcset="/assets/img/main/flores_Grupo04.webp">
+          <source type="image/png" srcset="/assets/img/main/flores_Grupo04.png">
+          <img class="adorno adorno-1" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000"
+            data-aos-once="false" src="/assets/img/main/flores_Grupo04.png" alt=""
+            loading="lazy">
+        </picture>
+
+        <div class="img-top-modal d-flex justify-content-center align-items-start">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+        </div>
+
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+        </div>
+
+        <div class="modal-body">
+          <p>Poner info</p>
+        </div>
+
+        <!-- <div class="modal-footer">
+          <a class="boton ampliar-mapa" target="_blank" href="#">Abrir Google Maps</a>
+        </div> -->
 
       </div>
 

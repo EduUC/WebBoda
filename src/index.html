@@ -525,55 +525,42 @@
 
     });
 
+    document.getElementById('num_asistentes').addEventListener('input', function () {
+      const numPersonas = parseInt(this.value);
+      const container = document.getElementById('personas-container');
+      const submitBtn = document.getElementById('submit-btn');
 
-    // Validacion de form.
-    function isOkAsistencia() {
+      container.innerHTML = ''; // Limpiar el contenedor de personas
 
-      // Remuevo mensajes de error anteriores
-      $("#error-form").remove();
-
-      // Variables necesarias para la validacion
-      var flag = true;
-      var err = '';
-
-
-      // Variables del form para validar.
-      var asistenteName = $.trim($("#nombreAsistente").val());
-      var asistenteComentarios = $.trim($("#comentariosAsistente").val());
-
-
-      // Nombre
-      if (asistenteName == '') {
-        flag = false;
-        err = lang_nombreRequerido;
-      } else {
-        if (asistenteName.length > 20) {
-          flag = false;
-          err = lang_caracteresNombreAsistencia;
-        }
+      // Generar los campos de nombre para cada persona
+      for (let i = 0; i < numPersonas; i++) {
+        const div = document.createElement('div');
+        div.classList.add('form-group');
+        div.innerHTML = `
+        <input type="text" class="form-control" id="persona-${i + 1}-nombre" name="persona-${i + 1}-nombre" placeholder="Nombre y Apellidos de la persona ${i + 1}" required minlength="5">
+      `;
+        container.appendChild(div);
       }
 
-      // Comentarios
-      if (asistenteComentarios != '') {
-        if (asistenteComentarios.length > 100) {
-          flag = false;
-          err = lang_caracteresComentariosAsistencia;
-        }
+      // Verificar si al menos uno de los campos de nombre está completo
+      toggleSubmitButton();
+    });
+
+    function validarMaximo() {
+      const input = document.getElementById('num_asistentes');
+      if (parseInt(input.value) > 9) {
+        input.value = 9;
       }
-
-      // Si hay error
-      if (flag === false) {
-
-        // Imprimo el error
-        $('#formAsistencia').after('<span id="error-form">' + err + '</span>');
-
-      }
-
-      // Retorno el estado de la validacion
-      return flag;
-
     }
 
+    function verificarCampos() {
+      // Obtener el formulario y el botón
+      var formulario = document.getElementById('formAsistencia');
+      var boton = document.getElementById('sendAsistencia');
+
+      // Verificar si el formulario es válido
+      boton.disabled = !formulario.checkValidity();
+    }
 
     // Enviar asistencia
     $('body').on('click', '#sendAsistencia', function (e) {
@@ -581,81 +568,77 @@
       e.preventDefault();
 
 
-      if (isOkAsistencia()) //Form bien validado
-      {
 
-        // Load and disabled buttom.
-        $("#sendAsistencia").text(lang_informandoAsistencia + "...");
-        $("#sendAsistencia").prop("disabled", true);
+      // Load and disabled buttom.
+      $("#sendAsistencia").text(lang_informandoAsistencia + "...");
+      $("#sendAsistencia").prop("disabled", true);
 
-        // Obtengo el Form.
-        var formulario = $("#formAsistencia")[0];
+      // Obtengo el Form.
+      var formulario = $("#formAsistencia")[0];
 
-        // Obtengo los datos del formulario
-        var datos = new FormData(formulario);
+      // Obtengo los datos del formulario
+      var datos = new FormData(formulario);
 
 
-        // Visualizar como viajan los datos
-        // for (var pair of datos.entries()) {
-        //   console.log(pair[0] + ", " + pair[1]);
-        // }
-
-
-        // Envio con fetch los datos mediante POST
-        fetch(_pathApp + "producto/fetchs/confirmar-asistencia.php", {
-          method: "POST",
-          body: datos
-        })
-          // Promesas fetch
-          .then(res => res.json())
-          .then(data => {
-
-            // Si recibo error 
-            if (data.error === true) {
-
-              $("#sendAsistencia").text(lang_confirmarAsistencia);
-              $("#sendAsistencia").prop("disabled", false);
-
-              // Imprimo el error
-              $('#formAsistencia').after('<span id="error-form">' + data.desc + '</span>');
-            }
-
-            // Si no hay error 
-            if (data.error === false) {
-
-              $("#sendAsistencia").text(lang_confirmarAsistencia);
-              $("#sendAsistencia").prop("disabled", false);
-
-
-              // Oculto elementos del form y reseteo
-              $('#formAsistencia')[0].reset();
-              $('#modalAsistencia .formulario-content, #modalAsistencia .modal-footer, #modalAsistencia h5').hide();
-
-
-
-              // Acomodo el css para centrar mensaje
-              $('#modalAsistencia .modal-body').addClass('fix-height');
-
-              // Muestro mensaje de exito
-              $('#modalAsistencia .msj-content').html(
-                "<h5>" + lang_asistenciaMsjExito_1 + "</h5><p>" + lang_asistenciaMsjExito_2 + "</p>"
-              ).show();
-
-
-              // Cierro modal y vuelvo a activar form
-              setTimeout(function () {
-
-                $('#modalAsistencia').modal('hide');
-                $('#modalAsistencia .formulario-content, #modalAsistencia .modal-footer, #modalAsistencia h5').show();
-                $('#modalAsistencia .msj-content').html('').hide();
-                $('#modalAsistencia .modal-body').removeClass('fix-height');
-
-              }, 4000);
-
-            }
-
-          });
+      // Visualizar como viajan los datos
+      for (var pair of datos.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
       }
+
+
+      // Envio con fetch los datos mediante POST
+      // fetch("http://localhost:5000/api/backend/add", {
+      fetch("https://webboda.vercel.app/api/backend/add", {
+        method: "POST",
+        body: datos,
+        headers: {
+          "Accept": "application/json"
+        }
+      })
+        // Promesas fetch
+        .then(res => res.json())
+        .then(data => {
+
+          // Si recibo error 
+          if (data.success === true) {
+
+            $("#sendAsistencia").text(data.message);
+            $("#sendAsistencia").prop("disabled", true);
+            $("#sendAsistencia").css("background-color", "#ac8c61");
+
+            // Cierro modal y vuelvo a activar form
+            setTimeout(function () {
+
+              $('#modalAsistencia').modal('hide');
+              $('#modalAsistencia .formulario-content, #modalAsistencia .modal-footer, #modalAsistencia h5').show();
+              $('#modalAsistencia .msj-content').html('').hide();
+              $('#modalAsistencia .modal-body').removeClass('fix-height');
+
+            }, 2000);
+          }
+
+          // Si no hay error 
+          if (data.success === false) {
+
+            $("#sendAsistencia").text(lang_confirmarAsistencia);
+            $("#sendAsistencia").prop("disabled", false);
+
+
+            // Oculto elementos del form y reseteo
+            $('#formAsistencia')[0].reset();
+            $('#modalAsistencia .formulario-content, #modalAsistencia .modal-footer, #modalAsistencia h5').hide();
+
+            // Acomodo el css para centrar mensaje
+            $('#modalAsistencia .modal-body').addClass('fix-height');
+
+            // Muestro mensaje de exito
+            $('#modalAsistencia .msj-content').html(
+              "<h5>" + lang_asistenciaMsjExito_1 + "</h5><p>" + lang_asistenciaMsjExito_2 + "</p>"
+            ).show();
+          }
+
+        });
+
 
 
     });
@@ -806,6 +789,23 @@
     });
   </script>
 
+
+  <!-- Modal info -->
+  <script>
+    // Abrir modal
+    $('body').on('click', 'a.modal-info', function (e) {
+
+      e.preventDefault();
+
+      // Cambio título
+      $('#modalInfo .modal-title').text('Información de la Boda');
+
+      // Abro el modal
+      $('#modalInfo').modal({
+        backdrop: 'static'
+      });
+    });
+  </script>
 
 
   <!-- Modal como llegar -->

@@ -99,6 +99,10 @@
     text-decoration: none;
     color: #fff;
   }
+
+  .boton:disabled{
+    background-color: #C74A37;
+  }
   
   .title {
     width: 100%;

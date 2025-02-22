@@ -1,7 +1,6 @@
 const { agregarCancionAPlaylist, saveSpotifyTokens } = require('../services/spotifyClient');
 const axios = require('axios');
 const querystring = require('querystring');
-// const supabase = require('../config/supabase');
 
 // 📌 Configurar credenciales de Spotify
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
