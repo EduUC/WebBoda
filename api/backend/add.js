@@ -5,6 +5,6 @@ const upload = multer();
 
 module.exports = (req, res) => {
   upload.none()(req, res, () => {
-    addAsistencia(req, res);  
-  };
+    addAsistencia(req, res);
+  });
 };
