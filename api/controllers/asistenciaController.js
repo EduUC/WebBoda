@@ -1,20 +1,23 @@
+const { get } = require('http');
 const { agregarAsistencia } = require('../services/asistenciaClient');
 
 const addAsistencia = (req, res) => {
     console.log("✅ POST addAsistencia");
+    console.log("Body", req.body);
 
     let personas = [];
     const { num_asistentes } = req.body;
     const { asistencia } = req.body;
 
-    console.log("Body", req.body);
+
+    data = gettable();
+    console.log("Data", data);
 
     try {
         for (let i = 1; i <= num_asistentes; i++) {
             const nombre = req.body[`persona-${i}-nombre`];
             if (nombre) {
                 agregarAsistencia(nombre, asistencia);
-                console.log("Asistencia intento", nombre, asistencia);
             }
         }
 
