@@ -1,15 +1,20 @@
 {
   "version": 2,
-  "builds": [
+  "public": true,
+  "name": "cielitos",
+  "framework": "angular",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/cielitos",
+  "installCommand": "npm install",
+  "rewrites": [
     {
-      "src": "dist/*",
-      "use": "@vercel/static"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/cielitos/**"
     }
-  ]
+  }
 }
