@@ -24,16 +24,16 @@ async function agregarAsistencia(nombre, confirmacion) {
 async function gettable() {
     const { data: asistencia, error } = await supabase
         .from('asistencia')
-        .select('*')
+        .select('*');
 
-
-    if (error || !data.length) {
-        console.error("❌ Error al obtener el access token:", error);
+    if (error || !asistencia.length) {
+        console.error("❌ Error al obtener los datos:", error);
         return null;
     }
 
-    return data[0].access_token;
+    return asistencia; // Devuelve toda la data de la tabla
 }
+
 
 
 module.exports = { agregarAsistencia, gettable };
