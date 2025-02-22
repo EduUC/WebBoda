@@ -14,8 +14,6 @@
 
   <title>Boda de Eduardo y Lupe</title>
 
-
-
   <!-- Listado de css con version dinamica segun modificacion de archivo -->
   <link rel='stylesheet' href='/assets/css/addEvent.css' />
   <link rel='stylesheet' href='/assets/css/aos.css' />
@@ -739,7 +737,8 @@
 
         // 💡 Enviar la solicitud al backend
         $.ajax({
-          url: 'https://webboda.vercel.app/api/agregar-cancion',
+          url: 'https://webboda.vercel.app/api/spotify/add',
+          // url: 'http://localhost:5000/api/spotify/add',
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({ songId: songId }),

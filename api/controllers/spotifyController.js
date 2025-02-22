@@ -1,11 +1,16 @@
-const { agregarCancionAPlaylist } = require('../services/spotifyClient');
+const { agregarCancionAPlaylist, saveSpotifyTokens } = require('../services/spotifyClient');
 const axios = require('axios');
 const querystring = require('querystring');
-const supabase = require('../config/supabase');
+// const supabase = require('../config/supabase');
 
-
+// 📌 Configurar credenciales de Spotify
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
+const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
 
 const addSongToSpotify = async (req, res) => {
+    console.log("✅ POST addSpotifySong");
     const { songId } = req.body;
     const result = await agregarCancionAPlaylist(songId);
     res.json(result);
@@ -32,7 +37,7 @@ const callback = async (req, res) => {
     try {
         const tokenResponse = await axios.post(
             'https://accounts.spotify.com/api/token',
-            querystring.stringify({ 
+            querystring.stringify({
                 code: code,
                 redirect_uri: REDIRECT_URI,
                 grant_type: 'authorization_code'
@@ -48,6 +53,8 @@ const callback = async (req, res) => {
         accessToken = tokenResponse.data.access_token;
         refreshToken = tokenResponse.data.refresh_token;
 
+        saveSpotifyTokens(refreshToken, accessToken);
+
         console.log("✅ Nuevo token de usuario obtenido:", accessToken);
         res.send("✅ Autenticación completada. Ahora puedes cerrar esta ventana.");
     } catch (error) {
@@ -56,4 +63,4 @@ const callback = async (req, res) => {
     }
 }
 
-module.exports = { addSongToSpotify };
+module.exports = { addSongToSpotify, login, callback };

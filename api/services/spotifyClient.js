@@ -7,33 +7,78 @@ const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const PLAYLIST_ID = process.env.SPOTIFY_PLAYLIST_ID;
 
 let accessToken = '';
+const tokenId = 'a0f63176-9996-40a8-a5ec-11f9c29fb83f';
 
 // 📌 Obtener el refresh token desde Supabase
 async function getRefreshToken() {
     const { data, error } = await supabase
-        .from('tokens')
-        .select('refresh_token')
-        .eq('service', 'spotify')
-        .single();
+        .from('spotify_tokens')
+        .select('refresh_token')  // Seleccionamos el campo 'refresh_token'
+        .eq('id', tokenId);  // Filtramos por el id específico
 
-    if (error) {
+    if (error || !data.length) {
         console.error("❌ Error al obtener el refresh token:", error);
         return null;
     }
 
-    return data.refresh_token;
+    return data[0].refresh_token; 
+}
+
+
+async function getAccessToken() {
+    const { data, error } = await supabase
+        .from('spotify_tokens')
+        .select('access_token')  // Seleccionamos el campo 'refresh_token'
+        .eq('id', tokenId);  // Filtramos por el id específico
+
+    if (error || !data.length) {
+        console.error("❌ Error al obtener el access token:", error);
+        return null;
+    }
+
+    return data[0].access_token; 
 }
 
 // 📌 Guardar el refresh token en Supabase
-async function saveRefreshToken(refreshToken) {
-    const { error } = await supabase
-        .from('tokens')
-        .upsert([{ service: 'spotify', refresh_token: refreshToken }]);
+async function saveSpotifyTokens(refreshToken, accessToken) {
+    const { data, error } = await supabase
+        .from('spotify_tokens')
+        .update({ access_token: accessToken, refresh_token: refreshToken })  // Actualizamos los tokens
+        .eq('id', tokenId);  // Filtramos por el id específico
 
     if (error) {
-        console.error("❌ Error al guardar el refresh token:", error);
+        console.error("❌ Error al actualizar en Supabase:", error.message);
+        return res.status(500).send("Error al actualizar en la base de datos.");
     } else {
-        console.log("💾 Refresh token guardado en Supabase.");
+        console.log("✅ Spotify Tokens de usuario actualizados en la base de datos.");
+    }
+}
+
+async function saveRefreshToken(refreshToken) {
+    const { data, error } = await supabase
+        .from('spotify_tokens')
+        .update({ refresh_token: refreshToken }) 
+        .eq('id', tokenId); 
+
+    if (error) {
+        console.error("❌ Error al actualizar en Supabase:", error.message);
+        return res.status(500).send("Error al actualizar en la base de datos.");
+    } else {
+        console.log("✅ refreshToken actualizado en la base de datos.");
+    }
+}
+
+async function saveAccessToken(accessToken) {
+    const { data, error } = await supabase
+        .from('spotify_tokens')
+        .update({ access_token: accessToken })  
+        .eq('id', tokenId); 
+
+    if (error) {
+        console.error("❌ Error al actualizar en Supabase:", error.message);
+        return res.status(500).send("Error al actualizar en la base de datos.");
+    } else {
+        console.log("✅ AccessToken actualizado en la base de datos.");
     }
 }
 
@@ -68,6 +113,8 @@ async function refreshAccessToken() {
             await saveRefreshToken(response.data.refresh_token);
         }
 
+        await saveAccessToken(response.data.access_token);
+
         return accessToken;
     } catch (error) {
         console.error("❌ Error al refrescar el token:", error.response?.data || error.message);
@@ -100,15 +147,14 @@ async function verificarCancionEnPlaylist(songId) {
 // 📌 Agregar una canción a la playlist de Spotify
 async function agregarCancionAPlaylist(songId) {
     try {
+        console.log("🔄 Intentando refrescar el token...");
+        accessToken = await refreshAccessToken();
         if (!accessToken) {
-            console.log("🔄 Intentando refrescar el token...");
-            const newAccessToken = await refreshAccessToken();
-            if (!newAccessToken) {
-                return { error: "🔒 Usuario no autenticado en Spotify." };
-            }
+            return { error: "🔒 Usuario no autenticado en Spotify." };
         }
 
         const existe = await verificarCancionEnPlaylist(songId);
+
         if (!existe) {
             const response = await axios.post(
                 `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks`,
@@ -126,4 +172,4 @@ async function agregarCancionAPlaylist(songId) {
     }
 }
 
-module.exports = { agregarCancionAPlaylist, refreshAccessToken, saveRefreshToken };
+module.exports = { agregarCancionAPlaylist, refreshAccessToken, saveSpotifyTokens };
