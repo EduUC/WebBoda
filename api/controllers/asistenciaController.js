@@ -7,7 +7,7 @@ const addAsistencia = (req, res) => {
     // const { num_asistentes } = req.body;
     // const { asistencia } = req.body;
 
-    // console.log("Body", req.body);
+    console.log("Body", req.body);
 
 
     // console.log("Asistentes", num_asistentes);
