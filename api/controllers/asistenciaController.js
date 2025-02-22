@@ -9,8 +9,8 @@ const addAsistencia = (req, res) => {
     const { asistencia } = req.body;
 
 
-    data = gettable();
-    console.log("Data", data);
+    cosas = gettable();
+    console.log("Data", cosas);
 
     try {
         for (let i = 1; i <= num_asistentes; i++) {
