@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/index.html",
-      "use": "@vercel/node"
+      "src": "dist/cielitos/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.html"
+      "dest": "/dist/cielitos/$1"
     }
   ]
 }
