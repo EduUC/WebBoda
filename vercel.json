@@ -1,17 +1,15 @@
 {
   "version": 2,
-  "public": true,
-  "name": "cielitos",
-  "framework": "angular",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/cielitos",
-  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
+  ],  
   "functions": {
     "api/index.js": {
       "includeFiles": "dist/cielitos/**"
