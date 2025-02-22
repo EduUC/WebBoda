@@ -1,9 +1,8 @@
-const axios = require('axios');
 const supabase = require('./supabaseClient');
 require('dotenv').config();
 
 async function agregarAsistencia(nombre, confirmacion) {
-    console.log("✅ POST agregarAsistencia");
+    console.log("✅ Asistencia agregada a la base de datos:", nombre, confirmacion);
 
     const { data, error } = await supabase
         .from('asistencia')
