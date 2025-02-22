@@ -9,25 +9,12 @@ const addAsistencia = (req, res) => {
 
     console.log("Body", req.body);
 
-
-    console.log("Asistentes", num_asistentes);
-    console.log("Confirmacion", asistencia);
-
-    for (let i = 1; i <= num_asistentes; i++) {
-        const nombre = req.body[`persona-${i}-nombre`];
-        if (nombre) {
-            personas.push({ id: i, nombre });
-        }
-    }
-
-    console.log("Personas", personas);
-
     try {
         for (let i = 1; i <= num_asistentes; i++) {
             const nombre = req.body[`persona-${i}-nombre`];
             if (nombre) {
-                personas.push({ id: i, nombre });
                 agregarAsistencia(nombre, asistencia);
+                console.log("Asistencia intento", nombre, asistencia);
             }
         }
 
