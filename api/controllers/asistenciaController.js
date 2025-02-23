@@ -11,7 +11,7 @@ const addAsistencia = async (req, res) => {
         for (let i = 1; i <= num_asistentes; i++) {
             const nombre = req.body[`persona-${i}-nombre`];
             if (nombre) {
-                agregarAsistencia(nombre, asistencia);
+                await agregarAsistencia(nombre, asistencia);
             }
         }
 
