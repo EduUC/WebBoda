@@ -645,7 +645,7 @@
   </script>
 
 
-  <!-- Modal Confirmar Asistencia Fiesta -->
+  <!-- Modal Confirmar Asistencia Celebracion -->
   <script>
     // Abrir modal
     $('body').on('click', 'a.confirmar-asistencia-fiesta', function (e) {
@@ -711,7 +711,7 @@
     });
 
     function validarMaximo() {
-      const input = document.getElementById('num_asistentes');
+      const input = document.getElementById('num_asistentes_celebracion');
       if (parseInt(input.value) > 9) {
         input.value = 9;
       }
@@ -719,21 +719,21 @@
 
     function verificarCampos() {
       // Obtener el formulario y el botón
-      var formulario = document.getElementById('formAsistencia');
-      var boton = document.getElementById('sendAsistencia');
+      var formulario = document.getElementById('formAsistencia_celebracion');
+      var boton = document.getElementById('sendAsistencia_celebracion');
 
       // Verificar si el formulario es válido
       boton.disabled = !formulario.checkValidity();
     }
 
     // Enviar asistencia
-    $('body').on('click', '#sendAsistencia', function (e) {
+    $('body').on('click', '#sendAsistencia_celebracion', function (e) {
 
       e.preventDefault();
 
       // Load and disabled buttom.
-      $("#sendAsistencia").text(lang_informandoAsistencia + "...");
-      $("#sendAsistencia").prop("disabled", true);
+      $("#sendAsistencia_celebracion").text(lang_informandoAsistencia + "...");
+      $("#sendAsistencia_celebracion").prop("disabled", true);
 
       // Obtengo el Form.
       var formulario = $("#formAsistencia")[0];
@@ -750,7 +750,7 @@
 
       // Envio con fetch los datos mediante POST
       // fetch("http://localhost:5000/api/backend/add", {
-      fetch("https://webboda.vercel.app/api/backend/add_celebracion", {
+      fetch("https://webboda.vercel.app/api/backend/add", {
         method: "POST",
         body: datos,
         headers: {
@@ -764,9 +764,9 @@
           // Si recibo error 
           if (data.success === true) {
 
-            $("#sendAsistencia").text(data.message);
-            $("#sendAsistencia").prop("disabled", true);
-            $("#sendAsistencia").css("background-color", "#ac8c61");
+            $("#sendAsistencia_celebracion").text(data.message);
+            $("#sendAsistencia_celebracion").prop("disabled", true);
+            $("#sendAsistencia_celebracion").css("background-color", "#ac8c61");
 
             // Cierro modal y vuelvo a activar form
             setTimeout(function () {
@@ -782,8 +782,8 @@
           // Si no hay error 
           if (data.success === false) {
 
-            $("#sendAsistencia").text(lang_confirmarAsistencia);
-            $("#sendAsistencia").prop("disabled", false);
+            $("#sendAsistencia_celebracion").text(lang_confirmarAsistencia);
+            $("#sendAsistencia_celebracion").prop("disabled", false);
 
 
             // Oculto elementos del form y reseteo
