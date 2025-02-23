@@ -4,7 +4,7 @@ require('dotenv').config();
 async function agregarAsistencia_Ceremonia(nombre, confirmacion) {
     try {
         const { data, error } = await supabase
-            .from('asistencia')
+            .from('asistencia_ceremonia')
             .insert([{ nombre, confirmacion }]);
 
         if (error) {
@@ -21,7 +21,7 @@ async function agregarAsistencia_Ceremonia(nombre, confirmacion) {
 async function agregarAsistencia_Celebracion(nombre, confirmacion, datoAdicional) {
     try {
         const { data, error } = await supabase
-            .from('asistencia')
+            .from('asistencia_celebracion')
             .insert([{ nombre, confirmacion, datoAdicional}]);
 
         if (error) {
