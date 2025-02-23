@@ -309,7 +309,7 @@
           <div class="info-box">
             <h6>Lugar de la Fiesta</h6>
             <p>La Font Blanca,<br>Huerto de Santa Mar&iacute;a</p>
-            <a href="#" data-evento="Fiesta" class="boton confirmar-asistencia">Confirmar asistencia</a>
+            <a href="#" data-evento="Fiesta" class="boton confirmar-asistencia-fiesta">Confirmar asistencia</a>
           </div>
 
         </div>
@@ -590,7 +590,7 @@
 
 <!-- Si esta en modo "Modelo" muestro el repdorductor de musica sin musica -->
 
-<!-- Modal asistencia-->
+<!-- Modal asistencia ceremonia-->
 <div id="modalAsistencia" class="modal fade" tabindex="-1">
   <div class="modal-dialog modal-md modal-dialog-centered">
 
@@ -629,7 +629,6 @@
           <div class="formulario-content">
 
             <form id="formAsistencia" oninput="verificarCampos()" action="" enctype="multipart/form-data">
-
 
               <div class="form-group d-flex justify-content-around custom-control custom-radio custom-control-inline">
                 <div class="form-check">
@@ -671,6 +670,88 @@
 
   </div>
 </div>
+
+<!-- Modal asistencia celebracion-->
+<div id="modalAsistenciaCeremonia" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+
+    <div class="modal-content">
+
+      <div class="modal-content-2">
+
+        <picture>
+          <source type="image/webp" srcset="/assets/img/main/flores_Grupo04.webp">
+          <source type="image/png" srcset="/assets/img/main/flores_Grupo04.png">
+          <img class="adorno adorno-1" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000"
+            data-aos-once="false" src="/assets/img/main/flores_Grupo04.png" alt=""
+            loading="">
+        </picture>
+
+
+        <div class="img-top-modal d-flex justify-content-center align-items-start">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+          <div class="white-circle-icon">
+            <img class="" src="/assets/img/img_circuloCeremonia.svg" alt="">
+          </div>
+
+        </div>
+
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+        </div>
+
+        <div class="modal-body">
+
+
+          <div class="formulario-content">
+
+            <form id="formAsistencia" oninput="verificarCampos()" action="" enctype="multipart/form-data">
+
+              <div class="form-group d-flex justify-content-around custom-control custom-radio custom-control-inline">
+                <div class="form-check">
+                  <input class="form-check-input custom-control-input" type="radio" name="asistencia" id="1" value="Si"
+                    checked>
+                  <label class="form-check-label custom-control-label" for="1">
+                    Si! Confirmo </label>
+                </div>
+                <div class="form-check">
+                  <input class="custom-control-input" type="radio" name="asistencia" id="2" value="No">
+                  <label class="custom-control-label" for="2">
+                    No puedo :( </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                  <input type="number" class="form-control" id="num_asistentes_celebracion" min="1" max="9" name='num_asistentes_celebracion'
+                  placeholder="Indica el número de personas que asistir&eacute;is a la ceremonia" oninput="validarMaximo()">
+              </div>
+
+              <div id="personas-container-2" class="form-group">
+              </div>
+
+            </form>
+
+          </div>
+
+          <div class="msj-content d-flex flex-column justify-content-center"></div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="sendAsistencia" class="boton" disabled>Enviar</button>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
 <!-- Modal sugerir cancion-->
 <div id="modalSugerirCancion" class="modal fade" tabindex="-1">
   <div class="modal-dialog modal-md modal-dialog-centered">

@@ -1522,7 +1522,7 @@
   }
   
   
-  /* Modal Confirmar asistencia*/
+  /* Modal Confirmar asistencia Ceremonia*/
   
   #modalAsistencia input,
   #modalAsistencia textarea {
@@ -1556,7 +1556,40 @@
     font-size: 15px;
   }
   
+   /* Modal Confirmar asistencia Celebracion*/
   
+   #modalAsistenciaCeremonia input,
+   #modalAsistenciaCeremonia textarea {
+     text-align: center;
+     background: none;
+     resize: none;
+     outline: none;
+     padding-bottom: 5px;
+     font-family: var(--fuente-3);
+   }
+   
+   #modalAsistenciaCeremonia input:focus,
+   #modalAsistenciaCeremonia textarea:focus {
+     border: none;
+     box-shadow: none;
+   }
+   
+   #modalAsistenciaCeremonia .form-group .form-check {
+     float: left;
+     margin-bottom: 10px;
+     margin-top: 10px;
+     font-size: 18px;
+   }
+   
+   #modalAsistenciaCeremonia .form-group .form-check label {
+     cursor: pointer;
+     padding-left: 5px;
+   }
+   
+   #modalAsistenciaCeremonia .form-control {
+     font-size: 15px;
+   }
+   
   
   /* Modal Sugerir cancion */
   
