@@ -1,6 +1,6 @@
 const { agregarAsistencia, gettable} = require('../services/asistenciaClient');
 
-const addAsistencia = (req, res) => {
+const addAsistencia = async (req, res) => {
     console.log("✅ POST addAsistencia");
     console.log("Body", req.body);
 
@@ -9,7 +9,7 @@ const addAsistencia = (req, res) => {
     const { asistencia } = req.body;
 
 
-    cosas = gettable();
+    cosas = await gettable();
     console.log("Data", cosas);
 
     try {
