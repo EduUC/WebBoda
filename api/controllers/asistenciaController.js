@@ -15,21 +15,18 @@ const addAsistencia = async (req, res) => {
     }
 
     try {
-        const promises = [];
         for (let i = 1; i <= num_asistentes; i++) {
             const nombre = req.body[`persona-${i}-nombre`];
             if (nombre) {
                 // Dependiendo del tipo de asistencia, agrega la correcta
+                
                 if (tipo_asistencia === 'ceremonia') {
-                    promises.push(agregarAsistencia_Ceremonia(nombre, asistencia));
+                    await (agregarAsistencia_Ceremonia(nombre, asistencia));
                 } else if (tipo_asistencia === 'celebracion') {
-                    promises.push(agregarAsistencia_Celebracion(nombre, asistencia, datoAdicional));
+                    await (agregarAsistencia_Celebracion(nombre, asistencia, datoAdicional));
                 }
             }
         }
-
-        // Espera a que todas las promesas se resuelvan en paralelo
-        await Promise.all(promises);
 
         console.log(`✅Asistencia ${tipo_asistencia} confirmada`);
 
