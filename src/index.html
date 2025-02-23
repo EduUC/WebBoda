@@ -541,9 +541,6 @@
       `;
         container.appendChild(div);
       }
-
-      // Verificar si al menos uno de los campos de nombre está completo
-      toggleSubmitButton();
     });
 
     function validarMaximo() {
@@ -702,15 +699,9 @@
         <textarea id="comentariosAsistente" class="form-control" name="dato_adicional" rows="2" placeholder="Indica algún dato importante adicional"></textarea>
       `;
       container.appendChild(div);
-
-
-
-
-      // Verificar si al menos uno de los campos de nombre está completo
-      toggleSubmitButton();
     });
 
-    function validarMaximo() {
+    function validarMaximo_celebracion() {
       const input = document.getElementById('num_asistentes_celebracion');
       if (parseInt(input.value) > 9) {
         input.value = 9;
