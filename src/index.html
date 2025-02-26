@@ -540,7 +540,7 @@
         <input type="text" class="form-control" id="persona-${i + 1}-nombre" name="persona-${i + 1}-nombre" placeholder="Nombre y Apellidos de la persona ${i + 1}" required minlength="5">
       `;
         container.appendChild(div);
-      }1
+      } 1
     });
 
     function validarMaximo() {
@@ -1060,56 +1060,61 @@
   </script>
 
 
-  <!-- AddEvent script -->
-  <script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
+  <!-- Agendar script -->
+  <script>
+    document.querySelectorAll('.addeventatc').forEach(button => {
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
 
+        let dropdown = this.nextElementSibling;
+        if (dropdown) {
+          // Alterna la visibilidad del dropdown con animación
+          dropdown.classList.toggle('show');
 
-  <!-- AddEvent Settings -->
-  <script type="text/javascript">
-    window.addeventasync = function () {
-      addeventatc.settings({
+          let titleElem = this.querySelector('.title');
+          let startElem = this.querySelector('.start');
+          let endElem = this.querySelector('.end');
 
-        css: false,
+          if (titleElem && startElem && endElem) {
+            let title = encodeURIComponent(titleElem.textContent);
+            let startDate = startElem.textContent.replace(/[-:]/g, '').replace(' ', 'T') + 'Z';
+            let endDate = endElem.textContent.replace(/[-:]/g, '').replace(' ', 'T') + 'Z';
+            let details = encodeURIComponent("¡Nos casamos! Te esperamos para celebrar juntos.");
 
-        appleical: {
-          show: true,
-          text: "Apple Calendar"
-        },
-        google: {
-          show: true,
-          text: "Google <em>(online)</em>"
-        },
-        office365: {
-          show: false,
-          text: "Office 365 <em>(online)</em>"
-        },
-        outlook: {
-          show: true,
-          text: "Outlook"
-        },
-        outlookcom: {
-          show: false,
-          text: "Outlook.com <em>(online)</em>"
-        },
-        yahoo: {
-          show: false,
-          text: "Yahoo <em>(online)</em>"
-        },
-        facebook: {
-          show: true,
-          text: "Facebook"
+            let googleUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${startDate}/${endDate}`;
+            let appleICS = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${title}\nDESCRIPTION:${details}\nDTSTART:${startDate}\nDTEND:${endDate}\nEND:VEVENT\nEND:VCALENDAR`;
+
+            let googleButton = dropdown.querySelector('.google-calendar');
+            let appleButton = dropdown.querySelector('.apple-calendar');
+
+            if (googleButton) {
+              googleButton.href = googleUrl;
+              googleButton.target = '_blank';
+            }
+
+            if (appleButton) {
+              let blob = new Blob([appleICS], { type: 'text/calendar' });
+              appleButton.href = URL.createObjectURL(blob);
+              appleButton.download = "boda.ics";
+            }
+          }
         }
       });
-    };
+    });
+
+    // Cerrar el dropdown si se hace clic fuera de él
+    document.addEventListener('click', function (event) {
+      const dropdowns = document.querySelectorAll('.calendar-dropdown');
+
+      dropdowns.forEach(dropdown => {
+        // Verificar si el clic fue fuera del dropdown y su contenedor
+        if (!dropdown.contains(event.target) && !event.target.closest('.addeventatc')) {
+          dropdown.classList.remove('show');
+        }
+      });
+    });
+
   </script>
-
-
-
-  <!-- Idiomas segun config de invitacion -->
-
-
-
-
 
 
   <!-- Portada parallax -->
