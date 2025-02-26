@@ -1076,10 +1076,10 @@
           let endElem = this.querySelector('.end');
 
           if (titleElem && startElem && endElem) {
-            let title = encodeURIComponent(titleElem.textContent);
+            let title = (titleElem.textContent);
             let startDate = startElem.textContent.replace(/[-:]/g, '').replace(' ', 'T');
             let endDate = endElem.textContent.replace(/[-:]/g, '').replace(' ', 'T');            
-            let details = encodeURIComponent("¡Nos casamos! Te esperamos para celebrar juntos.");
+            let details = ("¡Nos casamos! Te esperamos para celebrar juntos.");
 
             // Ajustar el formato de Google Calendar para que no se agregue la zona horaria errónea
             let googleUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${startDate}/${endDate}`;
