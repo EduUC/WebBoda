@@ -1077,10 +1077,11 @@
 
           if (titleElem && startElem && endElem) {
             let title = encodeURIComponent(titleElem.textContent);
-            let startDate = startElem.textContent.replace(/[-:]/g, '').replace(' ', 'T') + 'Z';
-            let endDate = endElem.textContent.replace(/[-:]/g, '').replace(' ', 'T') + 'Z';
+            let startDate = startElem.textContent.replace(/[-:]/g, '').replace(' ', 'T');
+            let endDate = endElem.textContent.replace(/[-:]/g, '').replace(' ', 'T');            
             let details = encodeURIComponent("¡Nos casamos! Te esperamos para celebrar juntos.");
 
+            // Ajustar el formato de Google Calendar para que no se agregue la zona horaria errónea
             let googleUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${startDate}/${endDate}`;
             let appleICS = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${title}\nDESCRIPTION:${details}\nDTSTART:${startDate}\nDTEND:${endDate}\nEND:VEVENT\nEND:VCALENDAR`;
 
