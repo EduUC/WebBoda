@@ -1782,3 +1782,7 @@ footer img.firma-footer {
 .calendar-dropdown a:hover {
   background: #f0f0f0;
 }
+
+.timeline-img {
+  width: 100%;
+}

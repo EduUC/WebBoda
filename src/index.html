@@ -1120,22 +1120,25 @@
 
   <!-- Portada parallax -->
   <script>
+
+    let image_root = '/assets/img/portada/4.JPG';
+
     if (device == 'mobile' || $(window).width() < 768) {
 
       // Aceptar webp?
       if (support_format_webp()) {
-        var imageParallax = 'assets/img/portada/portada.jpg';
+        var imageParallax = image_root;
       } else {
-        var imageParallax = 'assets/img/portada/portada.jpg';
+        var imageParallax = image_root;
       }
 
     } else {
 
       // Aceptar webp?
       if (support_format_webp()) {
-        var imageParallax = 'assets/img/portada/portada.jpg';
+        var imageParallax = image_root;
       } else {
-        var imageParallax = 'assets/img/portada/portada.jpg';
+        var imageParallax = image_root;
       }
 
     }
